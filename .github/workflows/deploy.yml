@@ -1,0 +1,14 @@
+name: Deploy my app
+
+on:
+    workflow_dispatch:
+
+jobs:
+    name: DeployApp
+    steps:
+        - uses: actions/checkout@v4
+        - name: DeployApp
+          runs-on: ubuntu-latest
+          id: DeployApp
+          run: |
+              echo "testing"

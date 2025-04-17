@@ -4,11 +4,12 @@ on:
     workflow_dispatch:
 
 jobs:
-    name: DeployApp
-    steps:
-        - uses: actions/checkout@v4
-        - name: DeployApp
-          runs-on: ubuntu-latest
-          id: DeployApp
-          run: |
-              echo "testing"
+    DeployApp:
+        name: DeployApp
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: deploy-app
+              id: DeployApp
+              run: |
+                  echo "testing"

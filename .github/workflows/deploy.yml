@@ -13,3 +13,5 @@ jobs:
               id: DeployApp
               run: |
                   echo "testing"
+                  which kubectl
+                  which aws

@@ -16,9 +16,15 @@ provider "aws" {
   region = "us-east-2"
 }
 
+provider "kubernetes" {
+  host                   = aws_eks_cluster.eks_cluster.endpoint
+  cluster_ca_certificate = base64decode(aws_eks_cluster.eks_cluster.certificate_authority[0].data)
+  token                  = data.aws_eks_cluster_auth.cluster.token
+}
+
 # Variables
 variable "cluster_name" {
-  description = "Name of the EKS cluster"
+  description = "EKS cluster name"
   type        = string
   default     = "my-eks-cluster"
 }
@@ -223,42 +229,9 @@ resource "aws_eks_node_group" "eks_nodes" {
   ]
 }
 
-# Kubernetes and Helm providers
 data "aws_eks_cluster_auth" "cluster" {
   name = aws_eks_cluster.eks_cluster.name
 }
-
-provider "kubernetes" {
-  host                   = aws_eks_cluster.eks_cluster.endpoint
-  cluster_ca_certificate = base64decode(aws_eks_cluster.eks_cluster.certificate_authority[0].data)
-  token                  = data.aws_eks_cluster_auth.cluster.token
-}
-
-# provider "helm" {
-#   kubernetes {
-#     host                   = aws_eks_cluster.eks_cluster.endpoint
-#     cluster_ca_certificate = base64decode(aws_eks_cluster.eks_cluster.certificate_authority[0].data)
-#     token                  = data.aws_eks_cluster_auth.cluster.token
-#   }
-# }
-
-# # Deploy NGINX Ingress Controller
-# resource "helm_release" "nginx_ingress" {
-#   name             = "nginx-ingress"
-#   repository       = "https://kubernetes.github.io/ingress-nginx"
-#   chart            = "ingress-nginx"
-#   namespace        = "ingress-nginx"
-#   create_namespace = true
-
-#   set {
-#     name  = "controller.service.type"
-#     value = "LoadBalancer"
-#   }
-
-#   depends_on = [
-#     aws_eks_node_group.eks_nodes
-#   ]
-# }
 
 # Outputs
 output "cluster_endpoint" {
@@ -268,11 +241,3 @@ output "cluster_endpoint" {
 output "cluster_id" {
   value = aws_eks_cluster.eks_cluster.id
 }
-
-output "kubeconfig_command" {
-  value = "aws eks update-kubeconfig --name ${aws_eks_cluster.eks_cluster.name} --region us-east-2"
-}
-
-# output "ingress_controller_instructions" {
-#   value = "To get the Ingress Controller Load Balancer address, run: kubectl get svc -n ingress-nginx nginx-ingress-ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'"
-# }

@@ -19,4 +19,4 @@ jobs:
                   aws eks update-kubeconfig --name my-eks-cluster --region us-east-2
                   kubectl apply -f app/
                   export APP_URL=`kubectl get svc istio-ingressgateway -n istio-system -o=jsonpath='{.status.loadBalancer.ingress[0].hostname}'`
-                  echo "App URL: ${APP_URL}" >> $GITHUB_STEP_SUMMARY
+                  echo "### App URL: http://${APP_URL}" >> $GITHUB_STEP_SUMMARY

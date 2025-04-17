@@ -12,6 +12,5 @@ jobs:
             - name: deploy-app
               id: DeployApp
               run: |
-                  echo "testing"
-                  which kubectl
-                  which aws
+                  echo "**** Setting up aws access."
+                  aws sts get-caller-identity

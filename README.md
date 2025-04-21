@@ -29,7 +29,7 @@ Deployed:
 ## K8s cluster
 
 -   VPN CNI add on installed
--   Istio installed after TF deployment (dimplifies ingress)
+-   Istio installed after TF deployment (simplifies ingress)
 
 ## App
 
